@@ -1,0 +1,1014 @@
+﻿<Window x:Class="DiceRoller.CharacterSheet"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Feuille de Personnage - Imperator" Height="1381" Width="827">
+    <ScrollViewer>
+        <StackPanel Margin="10">
+            <!-- Titre et Informations Personnelles -->
+            <TextBlock Text="Imperator" FontWeight="Bold" FontSize="16" Margin="10"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Nom :" Width="80"/>
+                <TextBox x:Name="nom" Width="200"/>
+                <TextBlock Text="Origine :" Width="80" Margin="20,0,0,0"/>
+                <TextBox x:Name="origine" Width="200"/>
+                <Button Content="Sauvegarder" Margin="10" Click="SaveCharacterButton_Click"/>
+                <Button Content="Charger" Margin="10" Click="LoadCharacterButton_Click"/>
+                <Button x:Name="ChatButton" Content="Chat" Width="100" Height="30" Click="ChatButton_Click"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                <TextBlock Text="Âge :" Width="80"/>
+                <TextBox x:Name="age" Width="50"/>
+                <TextBlock Text="ans" Margin="5,0,0,0"/>
+                <TextBlock Text="Taille :" Width="80" Margin="20,0,0,0"/>
+                <TextBox x:Name="taille" Width="50"/>
+                <TextBlock Text="M" Margin="5,0,0,0"/>
+                <TextBlock Text="Poids :" Width="80" Margin="20,0,0,0"/>
+                <TextBox x:Name="poids" Width="50"/>
+                <TextBlock Text="kg" Margin="5,0,0,0"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <TextBlock Text="Sexe :" Width="80"/>
+                <RadioButton x:Name="femme" GroupName="Sex" Content="♀" Margin="5,0,5,0"/>
+                <RadioButton x:Name="homme" GroupName="Sex" Content="♂"/>
+            </StackPanel>
+
+            <!-- Career and XP Details -->
+            <TextBlock Text="Carrières :" FontWeight="Bold" FontSize="14" Margin="10,20,0,0"/>
+            <Grid Margin="10">
+                <TextBlock Text="Carrière 1:" Grid.Column="0" Grid.Row="0" Margin="0,5,5,0"/>
+                <TextBox Grid.Column="1" Grid.Row="0" Width="200" Margin="0,5,0,0"/>
+                <!-- Continue adding career fields -->
+            </Grid>
+            <!-- Section des compétences -->
+            <TextBlock Text="Compétences" FontWeight="Bold" FontSize="16" Margin="10,20,0,0"/>
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Section CORPUS -->
+                <StackPanel x:Name="CorpusSkills" Grid.Column="0" Margin="0,0,10,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="CORPUS" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+                        <ComboBox x:Name="corpus" Width="50" SelectedIndex="0">
+                            <ComboBoxItem Content="0"/>
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Armes Contondandes :" Width="100"/>
+                            <ComboBox x:Name="Armes_Contondandes" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Armes Percantes :" Width="100"/>
+                            <ComboBox x:Name="Armes_Percantes" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Armes Tranchantes :" Width="100"/>
+                            <ComboBox x:Name="Armes_tranchantes" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Arme de Jet(Arc) :" Width="100"/>
+                            <ComboBox x:Name="Arme_Jet_Arc" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Arme de Jet(Frondes) :" Width="100"/>
+                            <ComboBox x:Name="Arme_Jet_Frondes" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Arme de Jet :" Width="100"/>
+                            <ComboBox x:Name="Arme_Jet" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Athlétisme :" Width="100"/>
+                            <ComboBox x:Name="Athletisme" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Bouclier :" Width="100"/>
+                            <ComboBox x:Name="Bouclier" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Attelage :" Width="100"/>
+                            <ComboBox x:Name="Attelage" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Endurance :" Width="100"/>
+                            <ComboBox x:Name="Endurance" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Equitation :" Width="100"/>
+                            <ComboBox x:Name="Equitation" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Escalade :" Width="100"/>
+                            <ComboBox x:Name="Escalade" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Esquive :" Width="100"/>
+                            <ComboBox x:Name="Esquive" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Natation :" Width="100"/>
+                            <ComboBox x:Name="Natation" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Pugilat :" Width="100"/>
+                            <ComboBox x:Name="Pugilat" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Souplesse :" Width="100"/>
+                            <ComboBox x:Name="Souplesse" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Vol à la tire :" Width="100"/>
+                            <ComboBox x:Name="Vol_a_la_tire" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Section CHARISMA -->
+                <StackPanel x:Name="CharismaSkills" Grid.Column="1" Margin="0,0,10,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="CHARISMA" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+                        <ComboBox x:Name="charisma" Width="50" SelectedIndex="0">
+                            <ComboBoxItem Content="0"/>
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Commandement :" Width="100"/>
+                            <ComboBox x:Name="Commandement" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Comédie/Danse :" Width="100"/>
+                            <ComboBox x:Name="Comedie_dance" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Dressage :" Width="100"/>
+                            <ComboBox x:Name="Dressage" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Marchandage :" Width="100"/>
+                            <ComboBox x:Name="Marchandage" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Persuasion :" Width="100"/>
+                            <ComboBox x:Name="Persuasion" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Politique :" Width="100"/>
+                            <ComboBox x:Name="Politique" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Psychologie :" Width="100"/>
+                            <ComboBox x:Name="Psychologie" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Réseau :" Width="100"/>
+                            <ComboBox x:Name="Reseau" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Séduction :" Width="100"/>
+                            <ComboBox x:Name="Seduction" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Us/Coutume :" Width="100"/>
+                            <ComboBox x:Name="Us_Coutume" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Section SENSUS -->
+                <StackPanel x:Name="SensusSkills" Grid.Column="2" Margin="0,0,10,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="SENSUS" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+                        <ComboBox x:Name="sensus" Width="50" SelectedIndex="0">
+                            <ComboBoxItem Content="0"/>
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Bibliothèque :" Width="100"/>
+                            <ComboBox x:Name="Bibliotheque" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Discrétion :" Width="100"/>
+                            <ComboBox x:Name="Discretion" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Divination :" Width="100"/>
+                            <ComboBox x:Name="Divination" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Estimation :" Width="100"/>
+                            <ComboBox x:Name="Estimation" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Fouille :" Width="100"/>
+                            <ComboBox x:Name="Fouille" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Orientation :" Width="100"/>
+                            <ComboBox x:Name="Orientation" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Pièges :" Width="100"/>
+                            <ComboBox x:Name="Pieges" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Pistage :" Width="100"/>
+                            <ComboBox x:Name="Pistage" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Survie :" Width="100"/>
+                            <ComboBox x:Name="Survie" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Vigilance :" Width="100"/>
+                            <ComboBox x:Name="Vigilance" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Section SPIRITUS-->
+                <StackPanel x:Name="SpiritusSkills" Grid.Column="3" Margin="0,0,10,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="SPIRITUS" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+                        <ComboBox x:Name="spiritus" Width="50" SelectedIndex="0">
+                            <ComboBoxItem Content="0"/>
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Agriculture :" Width="100"/>
+                            <ComboBox x:Name="Agriculture" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Alchimie :" Width="100"/>
+                            <ComboBox x:Name="Alchimie" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Artillerie :" Width="100"/>
+                            <ComboBox x:Name="Artillerie" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Artisanat :" Width="100"/>
+                            <ComboBox x:Name="Artisanat" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Ecriture :" Width="100"/>
+                            <ComboBox x:Name="Ecriture" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Gestion Patrimoine :" Width="100"/>
+                            <ComboBox x:Name="Gestion_Patrimoine" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Herboristerie :" Width="100"/>
+                            <ComboBox x:Name="Herboristerie" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Histoire :" Width="100"/>
+                            <ComboBox x:Name="Histoire" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Ingéniérie :" Width="100"/>
+                            <ComboBox x:Name="Ingenierie" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Language :" Width="100"/>
+                            <ComboBox x:Name="Language" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Médecine :" Width="100"/>
+                            <ComboBox x:Name="Medecine" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Mythologie :" Width="100"/>
+                            <ComboBox x:Name="Mythologie" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Navigation :" Width="100"/>
+                            <ComboBox x:Name="Navigation" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Occultisme :" Width="100"/>
+                            <ComboBox x:Name="Occultisme" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Résistance :" Width="100"/>
+                            <ComboBox x:Name="Resistance" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Stratégie :" Width="100"/>
+                            <ComboBox x:Name="Strategie" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Théologie :" Width="100"/>
+                            <ComboBox x:Name="Theologie" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Zoologie :" Width="100"/>
+                            <ComboBox x:Name="Zoologie" Width="50" SelectedIndex="0">
+                                <ComboBoxItem Content="0"/>
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="3"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                            </ComboBox>
+                            <Button Width="30" Height="30" Click="RollDiceForSkill_Click">
+                                <Button.Content>
+                                    <Image Source="/png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fantasy.png"/>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Additional sections for SENSUS and SPIRITUS can be added following the same pattern -->
+            </Grid>
+
+
+            <!-- Equipment and Traits -->
+            <TextBlock Text="Équipements et Ressources" FontWeight="Bold" FontSize="14" Margin="10,20,0,0"/>
+            <RichTextBox x:Name="equipementsRessources" Height="100" Margin="0,10"/>
+            <TextBlock Text="Avantages/Défauts" FontWeight="Bold" FontSize="14" Margin="0,20,0,0"/>
+            <RichTextBox x:Name="avantagesDefauts" Height="100" Margin="0,10"/>
+
+        </StackPanel>
+    </ScrollViewer>
+</Window>

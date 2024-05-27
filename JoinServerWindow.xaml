@@ -1,0 +1,14 @@
+﻿<Window x:Class="DiceRoller.JoinServerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Rejoindre Serveur" Height="250" Width="300">
+    <StackPanel Margin="10">
+        <Label>Adresse IP:</Label>
+        <TextBox x:Name="IpAddressTextBox"/>
+        <Label>Port:</Label>
+        <TextBox x:Name="PortTextBox"/>
+        <Label>Nom d'utilisateur:</Label>
+        <TextBox x:Name="UsernameTextBox"/>
+        <Button Content="Rejoindre Serveur" Margin="5" Click="JoinServer_Click"/>
+    </StackPanel>
+</Window>
