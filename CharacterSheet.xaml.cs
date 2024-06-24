@@ -51,6 +51,12 @@ namespace DiceRoller
                 ///
                 /// COMPETENCES
                 ///
+                // Charactéristique principal
+                Corpus = GetSelectedComboBoxValue(corpus),
+                Charisma = GetSelectedComboBoxValue(charisma),
+                Sensus = GetSelectedComboBoxValue(sensus),
+                Spiritus = GetSelectedComboBoxValue(spiritus),
+
 
                 //CORPUS compétences
                 ArmesContondantes = GetSelectedComboBoxValue(Armes_Contondandes),
@@ -120,11 +126,9 @@ namespace DiceRoller
 
                 // Ajoutez d'autres propriétés ici
             };
-            var equipmentsRtb = new TextRange(equipementsRessources.Document.ContentStart, equipementsRessources.Document.ContentEnd);
-            var traitsRtb = new TextRange(avantagesDefauts.Document.ContentStart, avantagesDefauts.Document.ContentEnd);
-
-            characterData.EquipementsRessourcesXaml = XamlWriter.Save(equipmentsRtb);
-            characterData.AvantagesDefautsXaml = XamlWriter.Save(traitsRtb);
+            // Extraire le texte des RichTextBox
+            characterData.EquipementsRessourcesText = new TextRange(equipementsRessources.Document.ContentStart, equipementsRessources.Document.ContentEnd).Text;
+            characterData.AvantagesDefautsText = new TextRange(avantagesDefauts.Document.ContentStart, avantagesDefauts.Document.ContentEnd).Text;
 
             // Sérialiser l'objet en JSON
             string json = JsonConvert.SerializeObject(characterData, Formatting.Indented);
@@ -149,7 +153,8 @@ namespace DiceRoller
                 // Écrire le JSON dans le fichier
                 File.WriteAllText(saveFileDialog.FileName, json);
             }
-            
+
+
         }
 
         // Permet de récupérer la valeur de mes comboBOX
@@ -185,6 +190,11 @@ namespace DiceRoller
                 poids.Text = characterData.Poids;
                 homme.IsChecked = characterData.Sexe == "Homme";
                 femme.IsChecked = characterData.Sexe == "Femme";
+
+                SetSelectedComboBoxValue(corpus, characterData.Corpus);
+                SetSelectedComboBoxValue(charisma, characterData.Charisma);
+                SetSelectedComboBoxValue(sensus, characterData.Sensus);
+                SetSelectedComboBoxValue(spiritus, characterData.Spiritus);
 
                 // Mettre à jour les compétences
                 SetSelectedComboBoxValue(Armes_Contondandes, characterData.ArmesContondantes);
@@ -249,20 +259,18 @@ namespace DiceRoller
                 SetSelectedComboBoxValue(Theologie, characterData.Theologie);
                 SetSelectedComboBoxValue(Zoologie, characterData.Zoologie);
 
-                /*if (!string.IsNullOrEmpty(characterData.EquipementsRessourcesXaml))
-                {
-                    var equipmentsDocument = new FlowDocument();
-                    var range = new TextRange(equipementsRessources.Document.ContentStart, equipementsRessources.Document.ContentEnd);
-                    range.Load(new MemoryStream(Encoding.UTF8.GetBytes(characterData.EquipementsRessourcesXaml)), DataFormats.Xaml);
-                }
+                LoadTextIntoRichTextBox(equipementsRessources, characterData.EquipementsRessourcesText);
+                LoadTextIntoRichTextBox(avantagesDefauts, characterData.AvantagesDefautsText);
 
-                if (!string.IsNullOrEmpty(characterData.AvantagesDefautsXaml))
-                {
-                    var traitsDocument = new FlowDocument();
-                    var range = new TextRange(avantagesDefauts.Document.ContentStart, avantagesDefauts.Document.ContentEnd);
-                    range.Load(new MemoryStream(Encoding.UTF8.GetBytes(characterData.AvantagesDefautsXaml)), DataFormats.Xaml);
-                }*/
+            }
+        }
 
+        private void LoadTextIntoRichTextBox(RichTextBox richTextBox, string text)
+        {
+            if (!string.IsNullOrEmpty(text))
+            {
+                richTextBox.Document.Blocks.Clear();
+                richTextBox.Document.Blocks.Add(new Paragraph(new Run(text)));
             }
         }
 
@@ -339,8 +347,13 @@ namespace DiceRoller
         public string Carriere1 { get; set; }
         public string Carriere2 { get; set; }
         public string Carriere3 { get; set; }
-        public string EquipementsRessourcesXaml { get; set; }
-        public string AvantagesDefautsXaml { get; set; }
+        public string EquipementsRessourcesText { get; set; }
+        public string AvantagesDefautsText { get; set; }
+
+        public int Corpus { get; set; }
+        public int Charisma { get; set; }
+        public int Spiritus { get; set; }
+        public int Sensus { get; set; }
 
 
         // CORPUS compétences
