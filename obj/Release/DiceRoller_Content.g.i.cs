@@ -8,7 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("png-transparent-d10-die-d10-dice-polyhedral-dice-polyhedral-dnd-game-rpg-ttrpg-fa" +
-    "ntasy.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("imagecouverture.png")]
 
 
