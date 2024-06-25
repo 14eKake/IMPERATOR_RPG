@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
@@ -20,51 +20,79 @@ namespace DiceRoller
         private TcpClient client;
         private Server server;
         public string Username { get; set; }
-        private string serverIp; // Ajouter cette variable
-        private int serverPort;  // Ajouter cette variable
+        private string serverIp;
+        private int serverPort;
         private bool isReconnecting = false;
+        private ObservableCollection<string> connectedUsers = new ObservableCollection<string>();
 
-        public Server Server
-        {
-            get { return server; }
-        }
+        public Server Server => server;
 
         public MainWindow()
         {
             InitializeComponent();
-            server = Server.Instance; // Utiliser l'instance singleton du serveur
-            server.MessageReceived -= Server_MessageReceived; // Désabonner pour éviter les abonnements multiples
-            server.MessageReceived += Server_MessageReceived;
-
+            InitializeEvents();
         }
 
-        // Démarrer le serveur
+        private void InitializeEvents()
+        {
+            ConnectedUsersList.ItemsSource = connectedUsers;
+            server = Server.Instance;
+            server.MessageReceived -= Server_MessageReceived;
+            server.MessageReceived += Server_MessageReceived;
+            server.UserConnected -= Server_UserConnected;
+            server.UserConnected += Server_UserConnected;
+            server.UserDisconnected -= Server_UserDisconnected;
+            server.UserDisconnected += Server_UserDisconnected;
+        }
+
+        private void Server_UserConnected(object sender, string username)
+        {
+            Dispatcher.Invoke(() => connectedUsers.Add(username));
+        }
+
+        private void Server_UserDisconnected(object sender, string username)
+        {
+            Dispatcher.Invoke(() => connectedUsers.Remove(username));
+        }
+
         public void StartServer(string ip, int port)
         {
-            server.MessageReceived -= Server_MessageReceived;  // Assurez-vous de désabonner avant de réabonner
+            server.MessageReceived -= Server_MessageReceived;
             server.MessageReceived += Server_MessageReceived;
-            server.LogMessage += Server_LogMessage; // S'abonner aux logs du serveur
+            server.LogMessage += Server_LogMessage;
             server.StartServer(ip, port);
             ChatBox.AppendText($"Serveur démarré sur {ip}:{port}\n");
         }
 
-        // Connecter au serveur
         public void ConnectToServer(string ip, int port, string username)
         {
             Username = username;
-            serverIp = ip; // Stocker l'IP du serveur
-            serverPort = port; // Stocker le port du serveur
+            serverIp = ip;
+            serverPort = port;
             client = new TcpClient();
             try
             {
                 client.Connect(ip, port);
                 ChatBox.AppendText($"Connecté au serveur {ip}:{port}\n");
                 UsernameDisplay.Text = $"Pseudo: {Username}";
+
+                StreamWriter writer = new StreamWriter(client.GetStream(), Encoding.UTF8) { AutoFlush = true };
+                writer.WriteLine(username);
+
                 Task.Run(() => ReceiveMessages(client));
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Échec de la connexion : {ex.Message}");
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (client != null && client.Connected)
+            {
+                SendMessage(client, $"USER_DISCONNECTED:{Username}");
+                client.Close();
             }
         }
 
@@ -79,31 +107,30 @@ namespace DiceRoller
 
         private void Server_LogMessage(object sender, string logMessage)
         {
-            Dispatcher.Invoke(() =>
-            {
-                AppendToChat(logMessage + "\n");
-            });
+            Dispatcher.Invoke(() => AppendToChat(logMessage + "\n"));
         }
 
         private async Task ReceiveMessages(TcpClient client)
         {
-            NetworkStream stream = client.GetStream();
-            StreamReader reader = new StreamReader(stream, Encoding.UTF8);
+            NetworkStream stream = null;
+            StreamReader reader = null;
+
             try
             {
+                stream = client.GetStream();
+                reader = new StreamReader(stream, Encoding.UTF8);
+
                 string message;
                 while ((message = await reader.ReadLineAsync()) != null)
                 {
-                    if (message.Contains("KEEP_ALIVE"))
-                    {
-                        continue; // Ignorer les messages KEEP_ALIVE
-                    }
+                    if (message.Contains("KEEP_ALIVE")) continue;
 
-                    Dispatcher.Invoke(() =>
-                    {
-                        ProcessReceivedMessage(message);
-                    });
+                    Dispatcher.Invoke(() => ProcessReceivedMessage(message));
                 }
+            }
+            catch (ObjectDisposedException ex)
+            {
+                Console.WriteLine("NetworkStream closed: " + ex.Message);
             }
             catch (IOException ex)
             {
@@ -119,10 +146,12 @@ namespace DiceRoller
             }
             catch (Exception ex)
             {
-                Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Show("Erreur lors de la réception des données : " + ex.Message);
-                });
+                Dispatcher.Invoke(() => MessageBox.Show("Erreur lors de la réception des données : " + ex.Message));
+            }
+            finally
+            {
+                reader?.Dispose();
+                stream?.Dispose();
             }
         }
 
@@ -137,49 +166,107 @@ namespace DiceRoller
             catch (Exception ex)
             {
                 MessageBox.Show("Échec de la reconnexion : " + ex.Message);
-                Task.Delay(10000).ContinueWith(_ => ReconnectToServer()); // Retenter la reconnexion après 10 secondes
+                Task.Delay(10000).ContinueWith(_ => ReconnectToServer());
             }
         }
 
-
-
-        public void ProcessReceivedMessage(string message)
+        private void ProcessReceivedMessage(string message)
         {
-            try
+            if (message.StartsWith("CONNECTED_USERS:"))
             {
-                // Supprimer tous les caractères avant "DICE_RESULT:" s'il est présent
-                int index = message.IndexOf("DICE_RESULT:");
-                if (index >= 0)
-                {
-                    message = message.Substring(index);
-                }
-
-                if (message.StartsWith("DICE_RESULT:"))
-                {
-                    // Retirer le préfixe "DICE_RESULT:"
-                    string content = message.Substring("DICE_RESULT:".Length).Trim();
-                    string[] parts = content.Split(new[] { "|SuccessCount:" }, StringSplitOptions.None);
-                    string coloredMessage = parts[0].Trim();
-                    int successCount = int.Parse(parts[1].Trim());
-
-                    // Afficher le message coloré
-                    DisplayColoredMessage(coloredMessage, successCount);
-                }
-                else
-                {
-                    AppendToChat(message + "\n");
-                }
+                UpdateConnectedUsersList(message.Substring("CONNECTED_USERS:".Length));
             }
-            catch (JsonException ex)
+            else if (message.StartsWith("USER_DISCONNECTED:"))
             {
-                AppendToChat("Erreur lors de la réception du message : " + ex.Message + "\n");
+                string username = message.Substring("USER_DISCONNECTED:".Length);
+                connectedUsers.Remove(username);
             }
-            catch (FormatException ex)
+            else if (message.StartsWith("DICE_RESULT:"))
             {
-                AppendToChat("Erreur lors de l'analyse du SuccessCount : " + ex.Message + "\n");
+                // Traite les résultats de dés avec du texte enrichi
+                string content = message.Substring("DICE_RESULT:".Length).Trim();
+                string[] parts = content.Split(new[] { "|SuccessCount:" }, StringSplitOptions.None);
+                string coloredMessage = parts[0].Trim();
+                int successCount = int.Parse(parts[1].Trim());
+
+                DisplayColoredMessage(coloredMessage, successCount);
+            }
+            else
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    ChatBox.AppendText(message + "\n");
+                    ChatBox.ScrollToEnd();
+                });
             }
         }
 
+
+        private void UpdateConnectedUsersList(string userList)
+        {
+            string[] users = userList.Split(',');
+            connectedUsers.Clear();
+            foreach (string user in users)
+            {
+                connectedUsers.Add(user);
+            }
+        }
+
+
+        private void AppendToChat(string message)
+        {
+            ChatBox.AppendText(message);
+            ChatBox.ScrollToEnd();
+        }
+
+        private void CharacterSheet_Click(object sender, RoutedEventArgs e)
+        {
+            CharacterSheet sheet = new CharacterSheet(this);
+            sheet.Show();
+        }
+
+        private void Send_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(InputBox.Text) && client != null && client.Connected)
+            {
+                SendMessageToServerOrChat($"{Username}: {InputBox.Text}");
+                InputBox.Clear();
+            }
+        }
+
+        private void InputBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && !string.IsNullOrEmpty(InputBox.Text))
+            {
+                SendMessageToServerOrChat($"{Username}: {InputBox.Text}");
+                InputBox.Clear();
+                e.Handled = true;
+            }
+        }
+
+        public void SendMessageToServerOrChat(string message)
+        {
+            if (server != null && server.IsServerRunning)
+            {
+                server.BroadcastMessage(message, null);
+            }
+            else if (client != null && client.Connected)
+            {
+                SendMessage(client, message);
+            }
+        }
+
+        private void SendMessage(TcpClient client, string message)
+        {
+            if (client == null || !client.Connected)
+            {
+                MessageBox.Show("Client non connecté ou null.");
+                return;
+            }
+
+            StreamWriter writer = new StreamWriter(client.GetStream(), Encoding.UTF8) { AutoFlush = true };
+            writer.WriteLine(message);
+        }
 
         private void DisplayColoredMessage(string message, int successCount)
         {
@@ -190,7 +277,6 @@ namespace DiceRoller
 
             foreach (Match match in matches)
             {
-                // Ajouter le texte non coloré avant la balise <run>
                 if (match.Index > lastPos)
                 {
                     paragraph.Inlines.Add(new Run(message.Substring(lastPos, match.Index - lastPos)));
@@ -208,13 +294,11 @@ namespace DiceRoller
                 lastPos = match.Index + match.Length;
             }
 
-            // Ajouter le texte restant après la dernière balise <run>
             if (lastPos < message.Length)
             {
                 paragraph.Inlines.Add(new Run(message.Substring(lastPos)));
             }
 
-            // Ajouter le SuccessCount à la fin du message
             paragraph.Inlines.Add(new LineBreak());
             paragraph.Inlines.Add(new Run($"SuccessCount: {successCount}")
             {
@@ -222,14 +306,9 @@ namespace DiceRoller
             });
 
             ChatBox.Document.Blocks.Add(paragraph);
-
-            // Ajouter un retour à la ligne et enlever le gras
-            var newParagraph = new Paragraph(new Run("\n"));
-            ChatBox.Document.Blocks.Add(newParagraph);
-
+            ChatBox.Document.Blocks.Add(new Paragraph(new Run("\n")));
             ChatBox.ScrollToEnd();
         }
-
 
         private bool IsValidJson(string strInput)
         {
@@ -238,7 +317,7 @@ namespace DiceRoller
             {
                 try
                 {
-                    var obj = JToken.Parse(strInput);
+                    JToken.Parse(strInput);
                     return true;
                 }
                 catch (JsonReaderException)
@@ -246,10 +325,7 @@ namespace DiceRoller
                     return false;
                 }
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         private void UpdateChatBox(FormattedMessage message)
@@ -280,68 +356,6 @@ namespace DiceRoller
             ChatBox.Document.Blocks.Add(paragraph);
             ChatBox.ScrollToEnd();
         }
-
-        private void AppendToChat(string message)
-        {
-            ChatBox.AppendText(message);
-            ChatBox.ScrollToEnd();
-        }
-
-        private void CharacterSheet_Click(object sender, RoutedEventArgs e)
-        {
-            CharacterSheet sheet = new CharacterSheet(this); // Passez 'this' pour garder une référence à MainWindow
-            sheet.Show();
-        }
-
-        private void Send_Click(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(InputBox.Text) && client != null && client.Connected)
-            {
-                SendMessageToServerOrChat($"{Username}: {InputBox.Text}");
-                InputBox.Clear();
-            }
-        }
-
-        private void InputBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter && !string.IsNullOrEmpty(InputBox.Text))
-            {
-                SendMessageToServerOrChat($"{Username}: {InputBox.Text}");
-                InputBox.Clear();
-                e.Handled = true;  // Empêche le bip système par défaut pour la touche Entrée
-            }
-        }
-
-        public void SendMessageToServerOrChat(string message)
-        {
-            if (server != null && server.IsServerRunning)
-            {
-                Console.WriteLine("Server is not null and running. Broadcasting message.");
-                server.BroadcastMessage(message, null);  // Envoi au serveur pour diffusion aux clients
-            }
-            else if (client != null && client.Connected)
-            {
-                SendMessage(client, message);  // Envoi direct si le client n'est pas le serveur
-            }
-            else
-            {
-                Console.WriteLine("Neither server nor client is available to send the message.");
-            }
-            // Ne pas appeler AppendToChat ici pour éviter d'afficher le message avant qu'il ne soit diffusé par le serveur
-        }
-
-        private void SendMessage(TcpClient client, string message)
-        {
-            if (client == null || !client.Connected)
-            {
-                MessageBox.Show("Client non connecté ou null.");
-                return;
-            }
-
-            StreamWriter writer = new StreamWriter(client.GetStream(), Encoding.UTF8) { AutoFlush = true };
-            writer.WriteLine(message);
-        }
-
     }
 
     public class FormattedMessage

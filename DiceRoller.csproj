@@ -189,5 +189,8 @@
   <ItemGroup>
     <Folder Include="Images\Dice\" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImageCouverture.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

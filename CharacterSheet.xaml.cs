@@ -35,6 +35,12 @@ namespace DiceRoller
 
         private void SaveCharacterButton_Click(object sender, RoutedEventArgs e)
         {
+            // Vérifie si tous les champs nécéssaire sont remlis 
+            if (!ValidateFields())
+            {
+                return;
+            }
+
             // Création d'un objet pour stocker les données de la feuille de personnage
             CharacterData characterData = new CharacterData
             {
@@ -45,6 +51,10 @@ namespace DiceRoller
                 Taille = taille.Text,
                 Poids = poids.Text,
                 Sexe = (homme.IsChecked ?? false) ? "Homme" : "Femme",
+
+                Carriere1 = Carriere_1.Text,
+                Carriere2 = Carriere_2.Text,
+                Carriere3 = Carriere_3.Text,
 
                 //Caractéristique Général
                 #region compétence
@@ -191,6 +201,10 @@ namespace DiceRoller
                 homme.IsChecked = characterData.Sexe == "Homme";
                 femme.IsChecked = characterData.Sexe == "Femme";
 
+                Carriere_1.Text = characterData.Carriere1;
+                Carriere_2.Text = characterData.Carriere2;
+                Carriere_3.Text = characterData.Carriere3;
+
                 SetSelectedComboBoxValue(corpus, characterData.Corpus);
                 SetSelectedComboBoxValue(charisma, characterData.Charisma);
                 SetSelectedComboBoxValue(sensus, characterData.Sensus);
@@ -334,6 +348,42 @@ namespace DiceRoller
             HomeWindow homeWindow = new HomeWindow();
             homeWindow.Show();
         }
+
+
+        private bool ValidateFields()
+        {
+            StringBuilder errors = new StringBuilder();
+
+            if (string.IsNullOrWhiteSpace(nom.Text))
+            {
+                errors.AppendLine("Le champ 'Nom' est obligatoire.");
+            }
+            if (string.IsNullOrWhiteSpace(origine.Text))
+            {
+                errors.AppendLine("Le champ 'Origine' est obligatoire.");
+            }
+            if (!int.TryParse(age.Text, out _))
+            {
+                errors.AppendLine("Le champ 'Âge' doit être un nombre valide.");
+            }
+            if (!float.TryParse(taille.Text, out _))
+            {
+                errors.AppendLine("Le champ 'Taille' doit être un nombre valide.");
+            }
+            if (!int.TryParse(poids.Text, out _))
+            {
+                errors.AppendLine("Le champ 'Poids' doit être un nombre valide.");
+            }
+
+            if (errors.Length > 0)
+            {
+                MessageBox.Show(errors.ToString(), "Erreur de Validation", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            return true;
+        }
+
 
     }
     public class CharacterData
