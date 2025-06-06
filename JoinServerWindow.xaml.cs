@@ -16,7 +16,11 @@ namespace DiceRoller
         private void JoinServer_Click(object sender, RoutedEventArgs e)
         {
             string ip = IpAddressTextBox.Text;
-            int port = int.Parse(PortTextBox.Text);
+            if (!int.TryParse(PortTextBox.Text, out int port))
+            {
+                MessageBox.Show("Invalid port number.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             string username = UsernameTextBox.Text;
             ((App)Application.Current).MainWindow = new MainWindow();
             ((MainWindow)((App)Application.Current).MainWindow).ConnectToServer(ip, port, username);
