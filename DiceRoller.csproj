@@ -50,19 +50,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <!-- <SignManifests>true</SignManifests> -->
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>DALL·E-2024-05-06-16.45.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <!-- <SignAssembly>true</SignAssembly> -->
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>8F03C4B3969E84D516A567A17C602D7A932928A2</ManifestCertificateThumbprint>
+    <!-- <ManifestCertificateThumbprint>8F03C4B3969E84D516A567A17C602D7A932928A2</ManifestCertificateThumbprint> -->
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>DiceRoller_4_TemporaryKey.pfx</ManifestKeyFile>
+    <!-- <ManifestKeyFile>DiceRoller_4_TemporaryKey.pfx</ManifestKeyFile> -->
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>
