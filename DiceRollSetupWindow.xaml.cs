@@ -29,6 +29,7 @@ namespace DiceRoller
         private int characterAttribute;
         private MainWindow mainWindow;
         private Server server;
+        private static readonly Random random = new Random();
 
         public DiceRollSetupWindow(int skillLevel, int characterAttribute, MainWindow main, Server server)
         {
@@ -57,7 +58,6 @@ namespace DiceRoller
 
         public void RollAndDisplayDice(int totalDice, Difficulty difficulty)
         {
-            Random random = new Random();
             StringBuilder resultBuilder = new StringBuilder();
             int successThreshold = SuccessThresholds.GetThreshold(skillLevel, difficulty);
             int successCount = 0;
