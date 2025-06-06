@@ -1,0 +1,19 @@
+# Visual Studio build directories
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Certificate files
+*.pfx
+
+# Test results
+TestResults/
+
+# Auto-generated files
+*.Generated.cs
+
