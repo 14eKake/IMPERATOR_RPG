@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Sockets;
@@ -10,8 +9,6 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace DiceRoller
 {
@@ -310,65 +307,5 @@ namespace DiceRoller
             ChatBox.ScrollToEnd();
         }
 
-        private bool IsValidJson(string strInput)
-        {
-            strInput = strInput.Trim();
-            if ((strInput.StartsWith("{") && strInput.EndsWith("}")) || (strInput.StartsWith("[") && strInput.EndsWith("]")))
-            {
-                try
-                {
-                    JToken.Parse(strInput);
-                    return true;
-                }
-                catch (JsonReaderException)
-                {
-                    return false;
-                }
-            }
-            return false;
-        }
-
-        private void UpdateChatBox(FormattedMessage message)
-        {
-            var paragraph = new Paragraph();
-            int lastPos = 0;
-            foreach (var format in message.Formats)
-            {
-                if (format.Index > lastPos)
-                {
-                    paragraph.Inlines.Add(new Run(message.Text.Substring(lastPos, format.Index - lastPos)));
-                }
-
-                var color = (Color)ColorConverter.ConvertFromString(format.Color);
-                var run = new Run(message.Text.Substring(format.Index, format.Length))
-                {
-                    Foreground = new SolidColorBrush(color)
-                };
-                paragraph.Inlines.Add(run);
-                lastPos = format.Index + format.Length;
-            }
-
-            if (lastPos < message.Text.Length)
-            {
-                paragraph.Inlines.Add(new Run(message.Text.Substring(lastPos)));
-            }
-
-            ChatBox.Document.Blocks.Add(paragraph);
-            ChatBox.ScrollToEnd();
-        }
-    }
-
-    public class FormattedMessage
-    {
-        public string Text { get; set; }
-        public List<FormatSpecification> Formats { get; set; } = new List<FormatSpecification>();
-        public int SuccessCount { get; set; }
-    }
-
-    public class FormatSpecification
-    {
-        public int Index { get; set; }
-        public int Length { get; set; }
-        public string Color { get; set; }
     }
 }
